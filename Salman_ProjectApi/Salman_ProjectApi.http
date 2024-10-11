@@ -1,0 +1,6 @@
+@Salman_ProjectApi_HostAddress = http://localhost:5225
+
+GET {{Salman_ProjectApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
