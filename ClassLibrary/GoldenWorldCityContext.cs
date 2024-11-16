@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+
 
 namespace ClassLibrary;
 
-public partial class GoldenWorldCityContext : DbContext
+public partial class GoldenWorldCityContext : IdentityDbContext <AppUser>
 {
     public GoldenWorldCityContext()
     {
@@ -20,11 +24,24 @@ public partial class GoldenWorldCityContext : DbContext
     public virtual DbSet<Country> Countries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=GoldenWorldCity;Trusted_Connection=True;MultipleActiveResultSets=true");
+    {
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
 
+        }
+        IConfigurationBuilder builder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false);
+        IConfigurationRoot configuration = builder.Build();
+
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnnection"));
+            
+       
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<City>(entity =>
         {
             entity.HasOne(d => d.Country).WithMany(p => p.Cities)
@@ -34,7 +51,7 @@ public partial class GoldenWorldCityContext : DbContext
 
         modelBuilder.Entity<Country>(entity =>
         {
-            entity.Property(e => e.Country1).IsFixedLength();
+            //entity.Property(e => e.Country).IsFixedLength();
             entity.Property(e => e.Iso2).IsFixedLength();
             entity.Property(e => e.Iso3).IsFixedLength();
         });

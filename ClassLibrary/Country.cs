@@ -30,7 +30,8 @@ public partial class Country
     [Column("Country")]
     [StringLength(10)]
     [Unicode(false)]
-    public string Country1 { get; set; } = null!;
+
+    //public string Country1 { get; set; } = null!;
 
     [InverseProperty("Country")]
     public virtual ICollection<City> Cities { get; set; } = new List<City>();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClassLibrary;
 using Salman_ProjectApi.Controllers.DTO;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace Salman_ProjectApi.Controllers
 {
@@ -23,9 +24,9 @@ namespace Salman_ProjectApi.Controllers
 
         // GET: api/Cities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCities()
+        public async Task<ActionResult<IList<CityDTO>>> GetCities()
         {
-            var x =  _context.Cities.Select(c => new CityDTO
+            IQueryable<CityDTO> x = _context.Cities.Select(c => new CityDTO
             {
 
                 Id = c.Id,
@@ -36,16 +37,15 @@ namespace Salman_ProjectApi.Controllers
                 Lng = c.Lng,
                 CountryName = c.Country.Name
 
-
-
-            });
+            }).Take(10); 
+                return await x.ToListAsync();
         }
 
         // GET: api/Cities/5
         [HttpGet("{id}")]
         public async Task<ActionResult<City>> GetCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
+            City? city = await _context.Cities.FindAsync(id);
 
             if (city == null)
             {
@@ -101,7 +101,7 @@ namespace Salman_ProjectApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
+            City? city = await _context.Cities.FindAsync(id);
             if (city == null)
             {
                 return NotFound();
