@@ -21,7 +21,7 @@ namespace Salman_ProjectApi.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: api/Countries
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
@@ -30,7 +30,6 @@ namespace Salman_ProjectApi.Controllers
         }
 
         // GET: api/Countries/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Country>> GetCountry(int id)
         {
@@ -43,7 +42,7 @@ namespace Salman_ProjectApi.Controllers
 
             return country;
         }
-
+        [Authorize]
         // GET: api/Countries/5
         [HttpGet("countryPopulation/{id}")]
         public async Task<ActionResult<countryPopulation>> GetCountryPopulation(int id)

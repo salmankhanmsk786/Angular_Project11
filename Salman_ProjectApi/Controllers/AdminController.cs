@@ -14,13 +14,13 @@ namespace Salman_ProjectApi.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> loginAsync(loginRequest request) {
-            AppUser? user  = await userManager.FindByNameAsync(request.UserName);
+            AppUser? user  = await userManager.FindByNameAsync(request.userName);
 
             if (user == null)
             {
                 return Unauthorized("Bad User name");
             }
-            bool success = await userManager.CheckPasswordAsync(user, request.PassWord);
+            bool success = await userManager.CheckPasswordAsync(user, request.password);
             if (!success) {
                 return Unauthorized("Bad Passowrd");
             
@@ -33,7 +33,7 @@ namespace Salman_ProjectApi.Controllers
             loginRespond respond = new()
             {
 
-                Success = true,
+                success = true,
                 message = "success",
                 token = jwtString
             };

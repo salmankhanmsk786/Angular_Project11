@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(c => {
         Contact = new()
         {
             Email = "salman@gmail.com",
-            Name = "salamn",
+            Name = "salman",
             Url = new("https://canvas.csun.edu/courses/128137")
         },
         Description = "APIs for World Cities",
@@ -48,7 +48,9 @@ builder.Services.AddSwaggerGen(c => {
     {
         { jwtSecurityScheme, [] }
     });
-}); builder.Services.AddDbContext<GoldenWorldCityContext>(
+});
+
+builder.Services.AddDbContext<GoldenWorldCityContext>(
     
    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnnection"))
     
